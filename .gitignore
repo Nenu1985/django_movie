@@ -10,8 +10,9 @@ dist
 db.sqlite3
 
 venv
+env
 
-
+config/*
 prod_settings.py
 local_settings.py
 
