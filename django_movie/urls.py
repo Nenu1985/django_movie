@@ -14,7 +14,7 @@ urlpatterns = [
 
 urlpatterns += i18n_patterns(
     path('accounts/', include('allauth.urls')),
-    path('pages/', include('django.contrib.flatpages.urls')),
+    path('pages/', include('django.contrib.flatpages.urls')),  # flat pages
     path('contact/', include("contact.urls")),
     path("", include("movies.urls")),
 )
