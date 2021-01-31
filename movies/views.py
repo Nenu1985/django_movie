@@ -8,7 +8,7 @@ from django.views.generic.base import View
 
 from .models import Movie, Category, Actor, Genre, Rating, Reviews
 from .forms import ReviewForm, RatingForm
-
+from .service import get_client_ip
 
 class GenreYear:
     """Жанры и года выхода фильмов"""
@@ -107,19 +107,11 @@ class JsonFilterMoviesView(ListView):
 class AddStarRating(View):
     """Добавление рейтинга фильму"""
 
-    def get_client_ip(self, request):
-        x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
-        if x_forwarded_for:
-            ip = x_forwarded_for.split(',')[0]
-        else:
-            ip = request.META.get('REMOTE_ADDR')
-        return ip
-
     def post(self, request):
         form = RatingForm(request.POST)
         if form.is_valid():
             Rating.objects.update_or_create(
-                ip=self.get_client_ip(request),
+                ip=get_client_ip(request),
                 movie_id=int(request.POST.get("movie")),
                 defaults={'star_id': int(request.POST.get("star"))}
             )

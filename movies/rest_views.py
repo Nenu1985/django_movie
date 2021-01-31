@@ -1,11 +1,19 @@
 
 from django.db import models
+from django.views import generic
 from rest_framework.response import Response
+from rest_framework import generics
 
 from rest_framework.views import APIView
 
-from .models import Movie
-from .serializers import CreateRatingSerializer, MovieListSerializer, MovieDetailSerializer, ReivewCreateSerializer
+from .models import Actor, Movie
+from .serializers import (
+    CreateRatingSerializer,
+    MovieListSerializer,
+    MovieDetailSerializer,
+    ReivewCreateSerializer,
+    ActorListSerializer,
+)
 from .service import get_client_ip
 class MovieListView(APIView):
     ''' Movie list '''
@@ -58,3 +66,10 @@ class AddStartRatingView(APIView):
             return Response(status=201)
         else:
             return Response(status=400)
+
+
+# Generic ListAPiView - useful class to impelement get/post just pointing out queryset and serializer
+class ActorListView(generics.ListAPIView):
+    ''' List of actors'''
+    queryset = Actor.objects.all()
+    serializer_class = ActorListSerializer

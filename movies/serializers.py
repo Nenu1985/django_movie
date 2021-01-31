@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Movie, Rating, Reviews
+from .models import Movie, Rating, Reviews, Actor
 
 
 class MovieListSerializer(serializers.ModelSerializer):
@@ -80,3 +80,9 @@ class CreateRatingSerializer(serializers.ModelSerializer):
         )
         return rating
         # return super().create(validated_data)
+
+class ActorListSerializer(serializers.ModelSerializer):
+    ''' List of actors '''
+    class Meta:
+        model = Actor
+        fields = ('id', 'name', 'image')
