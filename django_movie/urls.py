@@ -8,8 +8,10 @@ from django.urls import path, include
 
 urlpatterns = [
     path('djadmin/', admin.site.urls),
+    # path('api-auth/', include('rest_framework.urls')),
     path('ckeditor/', include('ckeditor_uploader.urls')),
     path('i18n/', include('django.conf.urls.i18n')),
+    path('api/v1/', include('movies.rest_urls')),
 ]
 
 urlpatterns += i18n_patterns(

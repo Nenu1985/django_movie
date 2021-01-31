@@ -140,7 +140,8 @@ class Reviews(models.Model):
     parent = models.ForeignKey(
         'self', verbose_name="Родитель", on_delete=models.SET_NULL, blank=True, null=True
     )
-    movie = models.ForeignKey(Movie, verbose_name="фильм", on_delete=models.CASCADE)
+    # related name means that we can get reviews FROM MOVIE by name 'reviews': Movie.reviews.
+    movie = models.ForeignKey(Movie, verbose_name="фильм", on_delete=models.CASCADE, related_name='reviews')
 
     def __str__(self):
         return f"{self.name} - {self.movie}"
