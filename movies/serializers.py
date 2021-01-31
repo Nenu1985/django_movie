@@ -5,9 +5,11 @@ from .models import Movie, Rating, Reviews
 
 class MovieListSerializer(serializers.ModelSerializer):
     ''' Movie list '''
+    category = serializers.SlugRelatedField(slug_field='name', read_only=True)  # To display category name instead of id
+    rating_user = serializers.IntegerField()
     class Meta:
         model = Movie
-        fields = ('title', 'tagline', 'category')
+        fields = ('title', 'tagline', 'category', 'rating_user')
 
 
 class FilterReviewListSerializer(serializers.ListSerializer):

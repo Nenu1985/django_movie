@@ -1,16 +1,28 @@
 
+from django.db import models
 from rest_framework.response import Response
 
 from rest_framework.views import APIView
 
 from .models import Movie
 from .serializers import CreateRatingSerializer, MovieListSerializer, MovieDetailSerializer, ReivewCreateSerializer
-
+from .service import get_client_ip
 
 class MovieListView(APIView):
     ''' Movie list '''
     def get(self, request):
-        movies = Movie.objects.filter(draft=False)  # no drafts
+        # 1 way: Adding extra field rating_user to check if movie has a rating;
+        # Disadvantage of this aproach is that each movie would be appear as many times as ratings have been made by each user;
+        # movies = Movie.objects.filter(draft=False).annotate(
+        #     rating_user=models.Case(  # Case is similar to if..elif...else
+        #         models.When(ratings__ip=get_client_ip(request), then=True),  # ratings__ip - calling ip field from the related retings 
+        #         default=False,
+        #         output_field=models.BooleanField()
+        #     ),
+        # )
+        # Second way:
+        movies = Movie.objects.filter(draft=False).annotate(
+            rating_user=models.Count('ratings', filter=models.Q(ratings__ip=get_client_ip(request))))
         serializer = MovieListSerializer(movies, many=True)
         return Response(serializer.data)
 
@@ -34,19 +46,12 @@ class ReviewCreateView(APIView):
 
 class AddStartRatingView(APIView):
     ''' Adding movie's rate '''
-    def get_client_ip(self, request):
-        x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
-        if x_forwarded_for:
-            ip = x_forwarded_for.split(',')[0]
-        else:
-            ip = request.META.get('REMOTE_ADDR')
-        return ip
 
     def post(self, request):
         serializer = CreateRatingSerializer(data=request.data)
 
         if serializer.is_valid():
-            serializer.save(ip=self.get_client_ip(request=request))
+            serializer.save(ip=get_client_ip(request=request))
             return Response(status=201)
         else:
             return Response(status=400)
