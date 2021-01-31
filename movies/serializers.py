@@ -9,6 +9,15 @@ class MovieListSerializer(serializers.ModelSerializer):
         model = Movie
         fields = ('title', 'tagline', 'category')
 
+class FilterReviewListSerializer(serializers.ListSerializer):
+    ''' Review filtering
+    Without this filtering all the reviews which hav parents are presenated both in parents (as nested)
+    and individually.
+    We need to leave single reviews (parent=None). Other reviews will be included to their parents.
+    '''
+    def to_representation(self, data):
+        data = data.filter(parent=None)
+        return super().to_representation(data)
 
 class ReivewCreateSerializer(serializers.ModelSerializer):
     ''' Adding review '''
@@ -17,11 +26,19 @@ class ReivewCreateSerializer(serializers.ModelSerializer):
         fields = '__all__'  # all fields to display
 
 
+class RecursiveSerializer(serializers.Serializer):
+    ''' Display children recursevly '''
+    def to_representation(self, value):
+        serializer = self.parent.parent.__class__(value, context=self.context)
+        return serializer.data
+
 class ReivewSerializer(serializers.ModelSerializer):
-    ''' Adding review '''
+    ''' Display Review info '''
+    children = RecursiveSerializer(many=True)
     class Meta:
+        list_serializer_class = FilterReviewListSerializer  # see FilterReviewListSerializer
         model = Reviews
-        fields = ('name', 'text', 'parent')
+        fields = ('name', 'text', 'parent', 'children')
 
 class MovieDetailSerializer(serializers.ModelSerializer):
     ''' Movie details '''

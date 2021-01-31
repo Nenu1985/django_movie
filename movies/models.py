@@ -83,6 +83,9 @@ class Movie(models.Model):
         return reverse("movie_detail", kwargs={"slug": self.url})
 
     def get_review(self):
+        return self.reviews.filter(parent__exact=None)
+
+    def get_review_old(self):
         return self.reviews_set.filter(parent__isnull=True)
 
     class Meta:
@@ -137,8 +140,10 @@ class Reviews(models.Model):
     email = models.EmailField()
     name = models.CharField("Имя", max_length=100)
     text = models.TextField("Сообщение", max_length=5000)
+    # related name children means that we can get children review FROM parent field of Review: Review.parent.children
     parent = models.ForeignKey(
-        'self', verbose_name="Родитель", on_delete=models.SET_NULL, blank=True, null=True
+        'self', verbose_name="Родитель", on_delete=models.SET_NULL, blank=True, null=True,
+        related_name='children'
     )
     # related name means that we can get reviews FROM MOVIE by name 'reviews': Movie.reviews.
     movie = models.ForeignKey(Movie, verbose_name="фильм", on_delete=models.CASCADE, related_name='reviews')
