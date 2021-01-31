@@ -7,7 +7,6 @@ from rest_framework.views import APIView
 from .models import Movie
 from .serializers import CreateRatingSerializer, MovieListSerializer, MovieDetailSerializer, ReivewCreateSerializer
 from .service import get_client_ip
-
 class MovieListView(APIView):
     ''' Movie list '''
     def get(self, request):
@@ -22,7 +21,11 @@ class MovieListView(APIView):
         # )
         # Second way:
         movies = Movie.objects.filter(draft=False).annotate(
-            rating_user=models.Count('ratings', filter=models.Q(ratings__ip=get_client_ip(request))))
+            rating_user=models.Count('ratings', filter=models.Q(ratings__ip=get_client_ip(request)))
+            ).annotate(
+           middle_star=models.Sum(models.F('ratings__star')) * 1.0 / models.Count(models.F('ratings'))  # F - для выполнения математ операций
+        )
+
         serializer = MovieListSerializer(movies, many=True)
         return Response(serializer.data)
 
