@@ -13,6 +13,7 @@ from .serializers import (
     MovieDetailSerializer,
     ReivewCreateSerializer,
     ActorListSerializer,
+    ActorDetailSerializer,
 )
 from .service import get_client_ip
 class MovieListView(APIView):
@@ -70,6 +71,12 @@ class AddStartRatingView(APIView):
 
 # Generic ListAPiView - useful class to impelement get/post just pointing out queryset and serializer
 class ActorListView(generics.ListAPIView):
-    ''' List of actors'''
+    ''' Returns List of actors'''
     queryset = Actor.objects.all()
     serializer_class = ActorListSerializer
+
+class ActorDetailView(generics.RetrieveAPIView):
+    ''' Returns detail info about actor'''
+    queryset = Actor.objects.all()
+    serializer_class = ActorDetailSerializer
+

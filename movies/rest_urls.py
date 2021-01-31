@@ -8,4 +8,5 @@ urlpatterns = [
     path('review/', rest_views.ReviewCreateView.as_view()),
     path('rating/', rest_views.AddStartRatingView.as_view()),
     path('actors/', rest_views.ActorListView.as_view()),
+    path('actors/<int:pk>/', rest_views.ActorDetailView.as_view()),
 ]

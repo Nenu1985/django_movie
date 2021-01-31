@@ -50,18 +50,7 @@ class ReivewSerializer(serializers.ModelSerializer):
         fields = ('name', 'text', 'parent', 'children')
 
 
-class MovieDetailSerializer(serializers.ModelSerializer):
-    ''' Movie details '''
-    category = serializers.SlugRelatedField(slug_field='name', read_only=True)  # To display category name instead of id
-    directors = serializers.SlugRelatedField(slug_field='name', read_only=True, many=True)
-    actors = serializers.SlugRelatedField(slug_field='name', read_only=True, many=True)
-    genres = serializers.SlugRelatedField(slug_field='name', read_only=True, many=True)
 
-    reviews = ReivewSerializer(many=True)
-
-    class Meta:
-        model = Movie
-        exclude = ('draft', )  # all field except 'draft'
 
 
 class CreateRatingSerializer(serializers.ModelSerializer):
@@ -82,7 +71,32 @@ class CreateRatingSerializer(serializers.ModelSerializer):
         # return super().create(validated_data)
 
 class ActorListSerializer(serializers.ModelSerializer):
-    ''' List of actors '''
+    ''' Returns list of actors '''
     class Meta:
         model = Actor
         fields = ('id', 'name', 'image')
+
+
+class ActorDetailSerializer(serializers.ModelSerializer):
+    ''' Returns full actor's information '''
+    class Meta:
+        model = Actor
+        fields = '__all__'
+
+
+class MovieDetailSerializer(serializers.ModelSerializer):
+    ''' Movie details '''
+    category = serializers.SlugRelatedField(slug_field='name', read_only=True)  # To display category name instead of id
+    # directors = serializers.SlugRelatedField(slug_field='name', read_only=True, many=True)  # to display name instead of id
+    # actors = serializers.SlugRelatedField(slug_field='name', read_only=True, many=True)  # to display name instead of id
+    # directors = ActorDetailSerializer(read_only=True, many=True)  # to display the full actor info instead of id
+    # actors = ActorDetailSerializer(read_only=True, many=True)  # to display the full actor info name instead of id
+    directors = ActorListSerializer(read_only=True, many=True)  # to display the full actor info instead of id
+    actors = ActorListSerializer(read_only=True, many=True)  # to display the full actor info name instead of id
+    genres = serializers.SlugRelatedField(slug_field='name', read_only=True, many=True)
+
+    reviews = ReivewSerializer(many=True)
+
+    class Meta:
+        model = Movie
+        exclude = ('draft', )  # all field except 'draft'
