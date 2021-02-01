@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 
 import os
 from datetime import timedelta
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -38,9 +39,10 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'allauth.socialaccount.providers.vk',
     'rest_framework',
-    'django_filters',
-    'djoser',
-    'rest_framework.authtoken',
+    'django_filters',  # filtering. see movies.service.MovieFilter and rest_views
+    'djoser',  # authentication: 1 way
+    'rest_framework.authtoken',  # authentication: 2 way
+    'drf_yasg',  # auto documentation
 ]
 
 MIDDLEWARE = [
