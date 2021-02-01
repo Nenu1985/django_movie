@@ -12,8 +12,9 @@ django-js-asset==1.2.2
 django-modeltranslation==0.14.4
 django-recaptcha3==0.1.0
 djangorestframework==3.12.2
+gunicorn==20.0.4
 h11==0.9.0
-httptools==0.1.1
+httptools==0.0.13
 idna==2.9
 Markdown==3.3.3
 oauthlib==3.1.0

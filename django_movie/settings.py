@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'allauth.socialaccount.providers.vk',
     'rest_framework',
+    'django_filters'
 ]
 
 MIDDLEWARE = [
@@ -212,6 +213,12 @@ RECAPTCHA_SCORE_THRESHOLD = 0.5
 
 SITE_ID = 1
 
+# Connecting extended filter features to rest_framework
+REST_FRAMEWORK = {
+    'DEFAULT_FILTER_BACKENDS': (
+        'django_filters.rest_framework.DjangoFilterBackend',
+    ),
+}
 
 try:
     from .local_settings import *
