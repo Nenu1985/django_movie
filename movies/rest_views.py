@@ -2,7 +2,7 @@
 from django.db import models
 from rest_framework import generics
 from django_filters.rest_framework import DjangoFilterBackend
-
+from rest_framework import permissions
 from .models import Actor, Movie
 from .serializers import (
     CreateRatingSerializer,
@@ -35,6 +35,8 @@ class MovieListView(generics.ListAPIView):
     # Connect to the class DjangoFilter
     filter_backends = (DjangoFilterBackend,)
     filterset_class = MovieFilter
+    # Defining permissions for the user (uses if you have authorization)
+    permission_classes = [permissions.AllowAny,]
 
     def get_queryset(self):
         movies = Movie.objects.filter(draft=False).annotate(

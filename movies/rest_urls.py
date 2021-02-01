@@ -1,4 +1,5 @@
 from django.urls import path
+from django.urls.conf import include
 
 from . import rest_views
 
@@ -9,4 +10,6 @@ urlpatterns = [
     path('rating/', rest_views.AddStartRatingView.as_view()),
     path('actors/', rest_views.ActorListView.as_view()),
     path('actors/<int:pk>/', rest_views.ActorDetailView.as_view()),
+    path('auth/', include('djoser.urls.authtoken')),  # uing djoser auth token
+    # path('auth/', include('djoser.urls.jwt')),  # using jwt auth token
 ]
