@@ -12,6 +12,7 @@ from .serializers import (
     ActorListSerializer,
     ActorDetailSerializer,
 )
+# from icecream import ic
 from .service import get_client_ip, MovieFilter
 
 # General APIView case:
@@ -39,6 +40,12 @@ class MovieListView(generics.ListAPIView):
     permission_classes = [permissions.AllowAny,]
 
     def get_queryset(self):
+        # meta = self.request.META
+        # ic(meta.get('HTTP_HOST'))
+        # ic(meta.get('REMOTE_ADDR'))
+        # ic(meta.get('X-Real_IP'))
+        # ic(meta.get('X-forwarded-Host'))
+        
         movies = Movie.objects.filter(draft=False).annotate(
             rating_user=models.Count('ratings', 
                                      filter=models.Q(ratings__ip=get_client_ip(self.request)))
