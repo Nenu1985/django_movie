@@ -28,20 +28,27 @@ def get_client_ip(request):
         ip = request.META.get('REMOTE_ADDR')
     return ip
 
-
+# # Old school MoviesView:
+# class MoviesView(View):
+#     def get(self, request):
+#         movies = Movie.objects.all()
+#         return render(request, 'movies/movie_list.html', { 'movie_list': movies})
 class MoviesView(GenreYear, ListView):
     """Список фильмов"""
     model = Movie
     queryset = Movie.objects.filter(draft=False)
     paginate_by = 5
+    # template name is generated automaticly by adding 'list' to 'movie': movie_list
+    # template_name = 'movies/movies.html'
 
 
 class MovieDetailView(GenreYear, DetailView):
     """Полное описание фильма"""
     model = Movie
     queryset = Movie.objects.filter(draft=False)
+    # slug field defines by which field we will find our movie
     slug_field = "url"
-
+    # template name defines automaticly from the model name ('Movie') plus 'detail' suffix: movie_detail
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["star_form"] = RatingForm()
@@ -131,3 +138,13 @@ class Search(ListView):
         context = super().get_context_data(*args, **kwargs)
         context["q"] = f'q={self.request.GET.get("q")}&'
         return context
+
+
+
+class FilterMoviesCategoryView(ListView):
+    """Фильтр фильмов"""
+    paginate_by = 5
+
+    def get_queryset(self):
+        queryset = Movie.objects.filter(category__name=self.kwargs.get('name')).distinct()
+        return queryset
