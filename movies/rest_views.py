@@ -1,5 +1,7 @@
 
 from django.db import models
+import logging
+from django.http import request
 from rest_framework import generics
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import permissions
@@ -15,6 +17,8 @@ from .serializers import (
 # from icecream import ic
 from .service import get_client_ip, MovieFilter
 
+# Get an instance of a logger
+logger = logging.getLogger(__name__)
 # General APIView case:
 # class MovieListView(APIView):
 #     ''' Movie list '''
@@ -45,7 +49,16 @@ class MovieListView(generics.ListAPIView):
         # ic(meta.get('REMOTE_ADDR'))
         # ic(meta.get('X-Real_IP'))
         # ic(meta.get('X-forwarded-Host'))
-        
+        meta = self.request.META
+        logger.debug({
+            'http_host': meta.get('HTTP_HOST'),
+            'remote_addr': meta.get('REMOTE_ADDR'),
+            'X-Real_IP': meta.get('X-Real_IP'),
+            'X-forwarded-Host': meta.get('X-forwarded-Host'),
+            'remote_addr': meta.get('REMOTE_ADDR'),
+            'username': self.request.user.username,
+            'user_ip': get_client_ip(self.request),
+            })
         movies = Movie.objects.filter(draft=False).annotate(
             rating_user=models.Count('ratings', 
                                      filter=models.Q(ratings__ip=get_client_ip(self.request)))
