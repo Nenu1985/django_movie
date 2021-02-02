@@ -1,10 +1,11 @@
+from ckeditor_uploader.widgets import CKEditorUploadingWidget
 from django import forms
 from django.contrib import admin
 from django.utils.safestring import mark_safe
-from ckeditor_uploader.widgets import CKEditorUploadingWidget
 from modeltranslation.admin import TranslationAdmin
 
-from .models import Category, Genre, Movie, MovieShots, Actor, Rating, RatingStar, Reviews
+from .models import (Actor, Category, Genre, Movie, MovieShots, Rating,
+                     RatingStar, Reviews)
 
 
 class MovieAdminForm(forms.ModelForm):

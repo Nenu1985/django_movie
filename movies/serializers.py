@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Movie, Rating, Reviews, Actor
+from .models import Actor, Movie, Rating, Reviews
 
 
 class MovieListSerializer(serializers.ModelSerializer):

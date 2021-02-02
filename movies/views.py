@@ -1,14 +1,15 @@
 from django.conf import settings
 from django.db import models
-from django.db.models import Q, OuterRef, Subquery, Case, When
-from django.http import JsonResponse, HttpResponse
+from django.db.models import Case, OuterRef, Q, Subquery, When
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect
-from django.views.generic import ListView, DetailView
+from django.views.generic import DetailView, ListView
 from django.views.generic.base import View
 
-from .models import Movie, Category, Actor, Genre, Rating, Reviews
-from .forms import ReviewForm, RatingForm
+from .forms import RatingForm, ReviewForm
+from .models import Actor, Category, Genre, Movie, Rating, Reviews
 from .service import get_client_ip
+
 
 class GenreYear:
     """Жанры и года выхода фильмов"""

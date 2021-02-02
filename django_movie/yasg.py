@@ -1,10 +1,10 @@
 ''' Here we setting up documentation rules using drf-yasg app'''
 
-from rest_framework import permissions
-from drf_yasg.views import get_schema_view
-from drf_yasg import openapi
-from django.urls import path
 from django.conf import settings
+from django.urls import path
+from drf_yasg import openapi
+from drf_yasg.views import get_schema_view
+from rest_framework import permissions
 
 if settings.DEBUG == True:
    url = 'http://127.0.0.1:8000/'

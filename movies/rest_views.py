@@ -1,21 +1,17 @@
 
-from django.db import models
 import logging
+
+from django.db import models
 from django.http import request
-from rest_framework import generics
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import permissions
+from rest_framework import generics, permissions
+
 from .models import Actor, Movie
-from .serializers import (
-    CreateRatingSerializer,
-    MovieListSerializer,
-    MovieDetailSerializer,
-    ReivewCreateSerializer,
-    ActorListSerializer,
-    ActorDetailSerializer,
-)
+from .serializers import (ActorDetailSerializer, ActorListSerializer,
+                          CreateRatingSerializer, MovieDetailSerializer,
+                          MovieListSerializer, ReivewCreateSerializer)
 # from icecream import ic
-from .service import get_client_ip, MovieFilter
+from .service import MovieFilter, get_client_ip
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
